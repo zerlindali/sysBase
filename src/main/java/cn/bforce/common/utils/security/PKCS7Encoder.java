@@ -1,4 +1,4 @@
-package cn.bforce.common.utils.crypt;
+package cn.bforce.common.utils.security;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;

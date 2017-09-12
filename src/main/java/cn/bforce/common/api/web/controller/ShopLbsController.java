@@ -20,7 +20,7 @@ import cn.bforce.common.utils.web.ExControllerUtils;
 @RequestMapping("/api/test")
 public class ShopLbsController
 {
-    static final Logger logger = LogManager.getLogger(AdvChannelController.class);
+    static final Logger logger = LogManager.getLogger(ShopLbsController.class);
 
     @Autowired
     private ShopLbsService shopLbsService;
@@ -35,6 +35,27 @@ public class ShopLbsController
         {
             Map paramMap = ExControllerUtils.buildParametersMap(request);
             result = shopLbsService.doLoad((Serializable)paramMap.get("shop_id"));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        data.put("data", result);
+        data.put("code", 0);
+        data.put("code", 0);
+        return data;
+    }
+    
+    // 指定数据源
+    @RequestMapping(value = "/shopLbs/up", produces = "application/json")
+    public Object up(HttpServletRequest request)
+    {
+        Map<String, Object> data = new HashMap();
+        Object result = null;
+        try
+        {
+            Map paramMap = ExControllerUtils.buildParametersMap(request);
+            result = shopLbsService.doUpdate(paramMap.get("v")+"");
         }
         catch (IOException e)
         {

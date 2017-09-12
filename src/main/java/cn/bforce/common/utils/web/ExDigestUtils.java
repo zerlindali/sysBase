@@ -18,13 +18,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cn.bforce.common.persistence.OperationException;
-import cn.bforce.common.utils.crypt.CryptRSA;
-
-import org.apache.logging.log4j.LogManager;
+import cn.bforce.common.utils.security.CryptRSA;
 
 
 

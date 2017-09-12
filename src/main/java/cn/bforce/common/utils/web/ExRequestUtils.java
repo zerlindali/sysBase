@@ -26,7 +26,6 @@ import org.apache.logging.log4j.Logger;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.bforce.common.persistence.DataObject;
-import cn.bforce.common.persistence.GlobalConfig;
 import cn.bforce.common.utils.ExStringUtils;
 
 public class ExRequestUtils {	
@@ -108,7 +107,7 @@ public class ExRequestUtils {
 	}
 	
 	public static String getLoginToken(HttpServletRequest request){
-		String name = GlobalConfig.getConfigValue("filter.cookie.loginToken");
+		/*String name = GlobalConfig.getConfigValue("filter.cookie.loginToken");
 		if (ExStringUtils.isBlank(name)){
 			name = GlobalConfig.KEY_LOGIN_TOKEN;
 		}
@@ -116,12 +115,13 @@ public class ExRequestUtils {
 		if (loginToken == null){
 			loginToken = request.getParameter("token");
 		}
-		return loginToken;
+		return loginToken;*/
+	    return "";
 	}	
 	
 	public static String getLoginId(HttpServletRequest request){
 		
-		String value = getCookieValue(request, GlobalConfig.KEY_LOGIN_ID);
+		/*String value = getCookieValue(request, GlobalConfig.KEY_LOGIN_ID);
 		if (value != null){				
 			return decodeURL(value);
 		}
@@ -146,17 +146,17 @@ public class ExRequestUtils {
 		}
 	
 		if (token != null){
-			/**
+			*//**
 			 * TODO 从缓存中获取usertoken的信息
-			 */
-			/*Map tokenMap = (Map)ExCacheUtils.getData("UserTokenCache", token);*/
+			 *//*
+			Map tokenMap = (Map)ExCacheUtils.getData("UserTokenCache", token);
 			Map tokenMap = new HashMap();
 			if (tokenMap != null){
 				return (String)tokenMap.get("loginUserId");
 			}else{
 			
 			}
-		}
+		}*/
 		
 		return null;
 	}

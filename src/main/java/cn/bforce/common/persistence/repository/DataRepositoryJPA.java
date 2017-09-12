@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.sql.DataSource;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import cn.bforce.common.persistence.NamedQuery;
 import cn.bforce.common.persistence.OperationException;
@@ -257,8 +255,8 @@ public class DataRepositoryJPA<T> implements DataRepository{
 		return null;
 	}
 	
-	@Override
+	/*@Override
 	public void linkColumnToValueList(){
 		
-	}
+	}*/
 }

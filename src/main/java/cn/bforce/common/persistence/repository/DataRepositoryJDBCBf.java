@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import com.alibaba.fastjson.JSON;
 
 import cn.bforce.common.persistence.DataObject;
-import cn.bforce.common.persistence.GlobalConfig;
 import cn.bforce.common.persistence.NamedQuery;
 import cn.bforce.common.persistence.OperationException;
 import cn.bforce.common.persistence.TableColumn;
@@ -429,29 +427,32 @@ public class DataRepositoryJDBCBf implements DataRepository {
 		SqlParameterSource[] batchArgs = new SqlParameterSource[dataList.size()];
 		
 		for(Map rowData : dataList){
-			Object createdTime = rowData.get("created");
-			if (createdTime == null || "".equalsIgnoreCase(createdTime.toString())){
-				rowData.put("created", new Date());
-			}
-			rowData.put("createdBy", this.loginUserId);
-			
-			for(TableColumn tableColumn: tableColumns){
-				Object value = rowData.get(tableColumn);	
-				// 转换日期字段
-				String columnType = tableColumn.getColumnType();
-				if (value != null && ("Date".equalsIgnoreCase(columnType) || "DateTime".equalsIgnoreCase(columnType) || "Timestamp".equalsIgnoreCase(columnType)) ){
-					Date date = null;
-					if (value instanceof String){
-						date = ExDateUtils.parseDate((String)value);
-					}else if (value instanceof Long){
-						date = ExDateUtils.parseDate((Long)value);						
-					}
-					if (date != null){
-						rowData.put(tableColumn.getColumnName(), date);
-					}
-				}
-			}
-			
+		    
+		    Object createdTime = rowData.get("reg_time");
+	        if (createdTime == null || "".equalsIgnoreCase(createdTime.toString())){
+	            rowData.put("reg_time", new Date());
+	        }
+	        rowData.put("createdBy", this.loginUserId);
+	        
+	        for(TableColumn tableColumn: tableColumns){
+	            Object value = rowData.get(tableColumn.getColumnName());    
+	            // 转换日期字段
+	            String columnType = tableColumn.getColumnType();
+	            if (value != null && ("Date".equalsIgnoreCase(columnType) || "DateTime".equalsIgnoreCase(columnType) || "Timestamp".equalsIgnoreCase(columnType)) ){
+	                Date date = null;
+	                if (value instanceof String){
+	                    date = ExDateUtils.parseDate((String)value);
+	                }else if (value instanceof Long){
+	                    date = ExDateUtils.parseDate((Long)value);                      
+	                }
+	                if (date != null){
+	                    rowData.put(tableColumn.getColumnName(), date);
+	                }
+	            }
+	        }
+	        
+	        log.debug("SQL:" + insertSQL + ", params = " + rowData);
+		    
 			batchArgs[index++]  = new MapSqlParameterSource(new CaseInsensitiveMap(rowData));
 			if (insertSQL == null){
 				insertSQL =  ExSQLUtils.buildInsertSQL(this.masterTable, tableColumnNames, rowData);
@@ -471,9 +472,9 @@ public class DataRepositoryJDBCBf implements DataRepository {
 		List<TableColumn> tableColumns = loadTableColumns();
 		String[] tableColumnNames = getTableColumnNames();
 		
-		Object createdTime = dataMap.get("created");
+		Object createdTime = dataMap.get("reg_time");
 		if (createdTime == null || "".equalsIgnoreCase(createdTime.toString())){
-			dataMap.put("created", new Date());
+			dataMap.put("reg_time", new Date());
 		}
 		dataMap.put("createdBy", this.loginUserId);
 		
@@ -541,7 +542,7 @@ public class DataRepositoryJDBCBf implements DataRepository {
 		String[] tableColumnNames = getTableColumnNames();
 		
 		dataMap.put(this.masterTablePK , rowId);
-		dataMap.remove("created"); // 去掉输入时间的字段
+		dataMap.remove("reg_time"); // 去掉输入时间的字段
 		
 		Map oldDataMap = this.doLoad(rowId);
 		String updateSQL =  ExSQLUtils.buildUpdateSQL(this.masterTable, this.masterTablePK,  tableColumnNames, dataMap, oldDataMap);
@@ -641,7 +642,7 @@ public class DataRepositoryJDBCBf implements DataRepository {
 		return this.valueListName;
 	}
 	
-	@Override
+/*	@Override
 	public void linkColumnToValueList(){
 	
 		String cacheName = "DataDictCache";
@@ -651,8 +652,8 @@ public class DataRepositoryJDBCBf implements DataRepository {
 		for(Iterator<String> iter = this.columnValueListMap.keySet().iterator(); iter.hasNext();){
 			
 			String value = (String)this.columnValueListMap.get(iter.next());
-			/*TODO
-			Map valueListMap = (Map)ExCacheUtils.getData(cacheName, value);*/
+			TODO
+			Map valueListMap = (Map)ExCacheUtils.getData(cacheName, value);
 			Map valueListMap = new HashMap();
 			if (valueListMap == null || valueListMap.isEmpty()){
 				List dataList = null;
@@ -670,11 +671,11 @@ public class DataRepositoryJDBCBf implements DataRepository {
 						valueListMap.put(String.valueOf(row.get("optValue")),String.valueOf(row.get("optLabel")));
 					}
 				}
-				/*TODO
-				ExCacheUtils.cacheData(cacheName, value, valueListMap);*/
+				TODO
+				ExCacheUtils.cacheData(cacheName, value, valueListMap);
 			}
 		}
-	}
+	}*/
 	
 	private Object invokeCommandMethod(String methodName, Map paramMap){
 		

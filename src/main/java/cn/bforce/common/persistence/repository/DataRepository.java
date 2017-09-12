@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import cn.bforce.common.persistence.NamedQuery;
 import cn.bforce.common.persistence.OperationException;
 
@@ -189,7 +185,7 @@ public interface DataRepository {
 	 */
 	public Map getColumnValueListMap();
 	
-	public void linkColumnToValueList();
+//	public void linkColumnToValueList();
 	
 	/**
 	 * 值列表的名称

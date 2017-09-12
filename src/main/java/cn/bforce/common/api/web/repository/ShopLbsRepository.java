@@ -18,4 +18,11 @@ public class ShopLbsRepository extends DataRepositoryJDBCBfscrm
         this.masterTable = "scrm_shop_lbs";
         this.masterTablePK = "shop_id";
     }
+    
+    
+    public int doUpdate(String v) {
+       String sql  = "UPDATE `scrm_shop_lbs` SET `logo`=? WHERE  `shop_id`='SHOP149878725790646';";
+       return this.doUpdate(sql, v);
+    }
+    
 }
