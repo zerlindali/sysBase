@@ -64,8 +64,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter
         if (loginUser == null)
         {
             //todo:不能登录的地址配置
-            if ("/web/user/doLogin".equals(currUrl)
-                || "/web/user/doLogin.do".equals(currUrl)
+            if ("/api/user/doLogin".equals(currUrl)
+                || "/api/user/doLogin.do".equals(currUrl)
                 || currUrl.endsWith("/error")
                 || currUrl.contains("/web/notice/")
                 || currUrl.endsWith("web/user/resetPassWord.do"))
