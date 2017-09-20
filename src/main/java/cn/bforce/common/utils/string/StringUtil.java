@@ -1,7 +1,11 @@
 package cn.bforce.common.utils.string;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -15,6 +19,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.jsoup.Jsoup;
@@ -31,6 +37,8 @@ import com.google.gson.stream.JsonWriter;
 
 public class StringUtil
 {
+
+    static final Logger logger = LogManager.getLogger(StringUtil.class);
 
     /**
      * 描述：字符串判空
@@ -522,5 +530,56 @@ public class StringUtil
             rand = rand + RandStr[Rand.nextInt(s)];
         }
         return rand;
+    }
+
+    /**
+     * <p class="detail"> 功能：序列化 </p>
+     * 
+     * @author yuandx
+     * @param object
+     * @return
+     * @throws
+     */
+    public static byte[] serialize(final Object object)
+    {
+        ObjectOutputStream oos = null;
+        ByteArrayOutputStream baos = null;
+        try
+        {
+            baos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(object);
+            return baos.toByteArray();
+        }
+        catch (Exception e)
+        {
+            logger.error("serialize error.");
+        }
+        return null;
+    }
+
+    /**
+     * <p class="detail">
+     * 功能：反序列化
+     * </p>
+     * @author yuandx
+     * @param bytes
+     * @return
+     * @throws
+     */
+    public static Object unserialize(final byte[] bytes)
+    {
+        ByteArrayInputStream bais = null;
+        try
+        {
+            bais = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            return ois.readObject();
+        }
+        catch (Exception e)
+        {
+            logger.error("unserialize error.");
+        }
+        return null;
     }
 }

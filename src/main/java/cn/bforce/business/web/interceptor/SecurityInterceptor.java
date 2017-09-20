@@ -2,33 +2,43 @@ package cn.bforce.business.web.interceptor;
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.bforce.business.web.beans.LoginTicket;
 import cn.bforce.business.web.http.StaticResouse;
+import cn.bforce.common.cache.authority.AuthorityUtil;
 import cn.bforce.common.utils.network.RequestParam;
 import cn.bforce.common.utils.web.ResponseObj;
 
 
 /**
- * <p class="detail"> 功能：登录日志记录拦截器及权限拦截 web / 命名接口路径拦截 </p>
- * 
- * @ClassName: webInterceptor
- * @version V1.0
- * @date 2014年9月28日
- * @author wangsheng
+ * <p class="detail">
+ * 功能：功能：登录日志记录拦截器及权限拦截 web / 命名接口路径拦截 
+ * </p>
+ * @ClassName: WebInterceptor 
+ * @version V1.0  
+ * @date 2017年9月15日 
+ * @author yuandx
+ * Copyright 2017 b-force.cn, Inc. All rights reserved
  */
-public class WebInterceptor extends HandlerInterceptorAdapter
+@Component
+public class SecurityInterceptor extends HandlerInterceptorAdapter
 {
 
-    static Logger logger = LogManager.getLogger(WebInterceptor.class);
+    static Logger logger = LogManager.getLogger(SecurityInterceptor.class);
+    
+    @Autowired
+    AuthorityUtil authorityUtil;
 
     /**
      * 最先执行 : 在业务处理器处理请求之前被调用 如果返回false 从当前的拦截器往回执行所有拦截器的afterCompletion(),再退出拦截器链 如果返回true
@@ -55,6 +65,7 @@ public class WebInterceptor extends HandlerInterceptorAdapter
         {
             //todo:不能登录的地址配置
             if ("/web/user/doLogin".equals(currUrl)
+                || "/web/user/doLogin.do".equals(currUrl)
                 || currUrl.endsWith("/error")
                 || currUrl.contains("/web/notice/")
                 || currUrl.endsWith("web/user/resetPassWord.do"))
@@ -75,12 +86,12 @@ public class WebInterceptor extends HandlerInterceptorAdapter
 
         if (canLogin)
         {
-            /*
-             * if(lt==null){ ResponseObj obj = new ResponseObj(); obj.setStatus(0);
-             * obj.setShowMessage("请先登录"); response.setHeader("Content-type",
-             * "application/json;charset=UTF-8"); response.getWriter().write(obj.getJsonStr());
-             * return false; }
-             */
+            Map<String, List> authMap = authorityUtil.getAuthMap();
+            
+            //Map<String, String> roles = loginUser.getRole();
+            //int level = loginUser.getLevel();
+            
+            logger.info("currUrl======:" + currUrl);
         }
 
         // TODO 权限划分

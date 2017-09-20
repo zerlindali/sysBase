@@ -1,25 +1,32 @@
 package cn.bforce.common.cache.redis;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import cn.bforce.common.utils.string.StringUtil;
 
 
 @Component
 public class RedisUtil
 {
 
+    static final Logger logger = LogManager.getLogger(RedisUtil.class);
+    
     @Autowired
     private JedisPool jedisPool;
 
-    public static final int MINUTE = 60 ; // 一分钟
-    
+    public static final int MINUTE = 60; // 一分钟
+
     public static final int HOUR = 60 * 60; // 一小时
 
     public static final int DAY = 24 * 60 * 60; // 一天，24小时 * 60分钟 * 60秒
@@ -279,6 +286,94 @@ public class RedisUtil
         {
             jedis = jedisPool.getResource();
             jedis.del(key);
+        }
+        finally
+        {
+            jedis.close();
+        }
+    }
+
+    /**
+     * <p class="detail">
+     * 功能：设置Map<String, List>缓存
+     * </p>
+     * @author yuandx
+     * @param key
+     * @param map
+     * @param expireTime
+     * @throws
+     */
+    public void setMapWithList(String key, Map<String, List> map, int expireTime)
+    {
+        Map<byte[], byte[]> newMap = new HashMap<byte[], byte[]>();
+
+        try
+        {
+            Set<String> keys = map.keySet();
+            if (keys != null && keys.size() > 0)
+            {
+                for (Object _key : keys)
+                {
+                    newMap.put(StringUtil.serialize(_key), StringUtil.serialize(map.get(_key)));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            logger.error("setMapWithList error.");
+        }
+
+        Jedis jedis = null;
+        
+        try
+        {
+            jedis = jedisPool.getResource();
+            jedis.hmset(StringUtil.serialize(key), newMap);
+            jedis.expire(StringUtil.serialize(key), expireTime);
+        }
+        finally
+        {
+            jedis.close();
+        }
+    }
+    
+    /**
+     * <p class="detail">
+     * 功能:获取Map<String, List>缓存
+     * </p>
+     * @author yuandx
+     * @param key
+     * @param map
+     * @param expireTime
+     * @throws
+     */
+    public Map<String, List> getMapWithList(String key)
+    {
+        Map<byte[], byte[]> cachedMap = new HashMap<byte[], byte[]>();
+        Map<String, List> result = new HashMap<String, List>();
+        Jedis jedis = null;
+        
+        try
+        {
+            jedis = jedisPool.getResource();
+            cachedMap = jedis.hgetAll(StringUtil.serialize(key));
+            
+            Set<byte[]> keys = cachedMap.keySet();
+            if (keys != null && keys.size() > 0)
+            {
+                for (byte[] _key : keys)
+                {
+                    result.put(StringUtil.unserialize(_key).toString(),
+                        (List)StringUtil.unserialize(cachedMap.get(_key)));
+                }
+            }
+            
+            return result;
+        }
+        catch (Exception e)
+        {
+            logger.error("getMapWithList error.");
+            return null;
         }
         finally
         {
