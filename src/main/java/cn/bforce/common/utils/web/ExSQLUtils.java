@@ -208,7 +208,9 @@ public class ExSQLUtils {
 					whereClause.append(paramMap.get(key + "Operator"));
 				}else if (value.endsWith("%")){
 					whereClause.append(key + " like ?");
-				}else{
+				}else if (value.indexOf(">") > 0 || value.indexOf(">=") > 0 ||value.indexOf("<") > 0 || value.indexOf("<=") > 0){
+                    whereClause.append(key + "?");
+                }else{
 					whereClause.append(key + " = ?");
 				}
 				paramValueList.add(paramMap.get(key));
@@ -217,6 +219,42 @@ public class ExSQLUtils {
 
 		return paramValueList.toArray();
 	}
+
+	/**
+	 * <p class="detail">
+	 * 功能：重构like,<,>等参数
+	 * </p>
+	 * @author Zerlinda
+	 * @date 2017年9月15日 
+	 * @param keyArr 需要构建的key
+	 * @param filterArr key对应的filter类型
+	 * @param paramMap
+	 * @return
+	 */
+	public static Map buildFilterParams(String[] keyArr, String[] filterArr, Map paramMap){
+        for(int i = 0; i < keyArr.length; i++){
+           String key = keyArr[i];
+           if(paramMap.containsKey(key)){
+               paramMap.put(key, buildFilterParam(paramMap.get(key).toString(),filterArr[i]));
+           }
+        }
+        return paramMap;
+    }
+	
+	public static String buildFilterParam(String value, String filter){
+        switch(filter){
+            case "%" : value = filter+value+filter; break;
+            case "_%" : value = value+"%"; break; 
+            case "%_" : value = "%"+value;  break; 
+            case ">" : value = filter + value; break; 
+            case "<" : value = filter + value; break; 
+            case ">=" : value = filter + value; break; 
+            case "<=" : value = filter + value; break; 
+            default : break;
+        }
+        return value;
+    }
+	
 	
 	
 	public static void main(String[] args) {

@@ -336,9 +336,14 @@ public class DataRepositoryJDBCBfscrm implements DataRepository {
 		}
 		Map rowData =  getJdbcTemplate().queryForMap(sql, parameters);
 		Object value = rowData.get("COUNT(*)");
-		if (value == null){
-			 value = rowData.get("");
-		}
+		if (value == null)
+        {
+            value = rowData.get("COUNT(1)");
+        }
+        if (value == null)
+        {
+            value = rowData.get("");
+        }
 		if (value == null){
 			return 0;
 		}
@@ -431,7 +436,7 @@ public class DataRepositoryJDBCBfscrm implements DataRepository {
 			if (createdTime == null || "".equalsIgnoreCase(createdTime.toString())){
 				rowData.put("reg_time", new Date());
 			}
-			rowData.put("createdBy", this.loginUserId);
+			rowData.put("create_user", this.loginUserId);
 			
 			for(TableColumn tableColumn: tableColumns){
 				Object value = rowData.get(tableColumn.getColumnName());	
@@ -473,7 +478,7 @@ public class DataRepositoryJDBCBfscrm implements DataRepository {
 		if (createdTime == null || "".equalsIgnoreCase(createdTime.toString())){
 			dataMap.put("reg_time", new Date());
 		}
-		dataMap.put("createdBy", this.loginUserId);
+		dataMap.put("create_user", this.loginUserId);
 		
 		String insertSQL =  ExSQLUtils.buildInsertSQL(this.masterTable, tableColumnNames, dataMap);
 		
@@ -706,4 +711,21 @@ public class DataRepositoryJDBCBfscrm implements DataRepository {
 		}*/
 		return userData;
 	}
+	
+    /**
+     * <p class="detail">
+     * 功能：查询记录数
+     * </p>
+     * @author Zerlinda
+     * @date 2017年9月14日 
+     * @param whereParams
+     * @return
+     */
+    public int queryRowCount(StringBuilder whereClause, Map whereParams)
+    {
+        Object[] paramObjs = ExSQLUtils.buildWhere(whereClause, whereParams);
+        String sql = "select COUNT(1) from " + this.masterTable + whereClause;
+        return this.getRowCount(sql, paramObjs);
+
+    }
 }

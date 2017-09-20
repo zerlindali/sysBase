@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import cn.bforce.common.utils.string.GsonUtil;
 import cn.bforce.common.utils.string.StringUtil;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -82,6 +83,16 @@ public class ResponseObj
      * 数据id，用来保存新增/修改记录的id
      */
     private Object dataId;
+    
+    /**
+     * 数据id，用来保存其它新增/修改记录的id
+     */
+    private Object dataId2;
+    
+    /**
+     * 操作日志详情
+     */
+    private Object logDetail;
 
     public ResponseObj()
     {
@@ -277,8 +288,9 @@ public class ResponseObj
     @JsonIgnore
     public String getJsonStr()
     {
-        Gson json = StringUtil.getGson();
-        return json.toJson(this);
+        //Gson json = StringUtil.getGson();
+        //return json.toJson(this);
+        return GsonUtil.beanToJSONString(this);
     }
 
     /**
@@ -371,6 +383,26 @@ public class ResponseObj
     public void setDataId(Object dataId)
     {
         this.dataId = dataId;
+    }
+
+    public Object getLogDetail()
+    {
+        return logDetail;
+    }
+
+    public void setLogDetail(Object logDetail)
+    {
+        this.logDetail = logDetail;
+    }
+
+    public Object getDataId2()
+    {
+        return dataId2;
+    }
+
+    public void setDataId2(Object dataId2)
+    {
+        this.dataId2 = dataId2;
     }
 
 }

@@ -206,5 +206,14 @@ public interface DataRepository {
 	 */
 	public void clearRowMetaData(Map dataMap);
 	
-	
+	 /**
+     * <p class="detail">
+     * 功能：查询记录数
+     * </p>
+     * @author Zerlinda
+     * @date 2017年9月14日 
+     * @param whereParams
+     * @return
+     */
+    public int queryRowCount(StringBuilder whereClause, Map whereParams);
 }

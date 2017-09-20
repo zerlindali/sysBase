@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -468,5 +469,58 @@ public class StringUtil
         }
         return resultList;
     }
-}
 
+    /**
+     * Rand number
+     * 
+     * @param length
+     * @return
+     */
+    public static final String RandNum(int length)
+    {
+        Random Rand = new Random();
+        char[] RandStr = ("0123456789").toCharArray();
+        String rand = "";
+        for (int i = 0, s = RandStr.length; i < length; i++ )
+        {
+            rand = rand + RandStr[Rand.nextInt(s)];
+        }
+        return rand;
+    }
+
+    /**
+     * Rand the abcABC...
+     * 
+     * @param length
+     * @return
+     */
+    public static final String RandAbc(int length)
+    {
+        Random Rand = new Random();
+        char[] RandStr = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
+        String rand = "";
+        for (int i = 0, s = RandStr.length; i < length; i++ )
+        {
+            rand = rand + RandStr[Rand.nextInt(s)];
+        }
+        return rand;
+    }
+
+    /**
+     * Rand the abcABC012......
+     * 
+     * @param length
+     * @return
+     */
+    public static final String RandStr(int length)
+    {
+        Random Rand = new Random();
+        char[] RandStr = ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789").toCharArray();
+        String rand = "";
+        for (int i = 0, s = RandStr.length; i < length; i++ )
+        {
+            rand = rand + RandStr[Rand.nextInt(s)];
+        }
+        return rand;
+    }
+}

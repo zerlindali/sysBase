@@ -1,6 +1,7 @@
 package cn.bforce.business.web.beans;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -17,8 +18,18 @@ import com.google.gson.Gson;
  * @date 2017-1-4
  * @author wuxw Copyright 2015 b-force.cn, Inc. All rights reserved
  */
-public class LoginTicket
+public class LoginTicket implements Serializable
 {
+
+    /** 
+     * <p class="detail">
+     * 功能：这里写描述
+     * </p>
+     * @Fields serialVersionUID 
+     * @author yuandx
+     * @date 2017年9月15日
+     */ 
+    private static final long serialVersionUID = 2593532068146309038L;
 
     private String userId;
 

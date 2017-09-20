@@ -25,6 +25,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import cn.bforce.common.persistence.NamedQuery;
 import cn.bforce.common.persistence.OperationException;
 import cn.bforce.common.utils.ExArrayList;
+import cn.bforce.common.utils.web.ExSQLUtils;
 
 public class DataRepositoryJPA<T> implements DataRepository{
 
@@ -254,6 +255,13 @@ public class DataRepositoryJPA<T> implements DataRepository{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+    public int queryRowCount(StringBuilder whereClause, Map whereParams)
+    {
+        return 0;
+
+    }
 	
 	/*@Override
 	public void linkColumnToValueList(){

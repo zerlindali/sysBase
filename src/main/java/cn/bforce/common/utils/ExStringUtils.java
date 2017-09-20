@@ -723,6 +723,31 @@ public class ExStringUtils
         return count;
     }
 
+    /**
+     * <p class="detail">
+     * 功能：校验字段是否为空
+     * </p>
+     * @author Zerlinda
+     * @date 2017年9月13日 
+     * @param keyArr 需要校验的必传字段名
+     * @param valueArr 需要校验的必传字段值
+     * @param paramMap 参数
+     * @return
+     */
+    public static String checkParams(String[] keyArr, String[] valueArr, Map paramMap){
+        String result = "";
+        for(int i = 0; i < keyArr.length; i++){
+           String key = keyArr[i];
+           if(!paramMap.containsKey(key)){
+               result += valueArr[i]+",";
+           }
+        }
+        if(isNotBlank(result)){
+            result = result.substring(0, result.length()-1)+"不能为空";
+        }
+        return result;
+    }
+    
     public static Map buildResultMessage(int resultCode, String resultMsg)
     {
         Map resultMap = new HashMap();

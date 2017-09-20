@@ -18,6 +18,8 @@ public class RedisUtil
     @Autowired
     private JedisPool jedisPool;
 
+    public static final int MINUTE = 60 ; // 一分钟
+    
     public static final int HOUR = 60 * 60; // 一小时
 
     public static final int DAY = 24 * 60 * 60; // 一天，24小时 * 60分钟 * 60秒

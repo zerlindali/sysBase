@@ -1,4 +1,4 @@
-package cn.bforce.business.web.action;
+package cn.bforce.common.utils.web;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,15 +7,7 @@ import cn.bforce.business.web.beans.LoginTicket;
 import cn.bforce.business.web.http.StaticResouse;
 
 
-/**
- * <p class="detail"> 功能：action基类，承载通用action方法 </p>
- * 
- * @ClassName: BaseAction
- * @version V1.0
- * @date 2015-5-28
- * @author tangy Copyright 2017 b-force.cn, Inc. All rights reserved
- */
-public class BaseAction
+public class LoginUtils
 {
 
     /**
@@ -25,7 +17,7 @@ public class BaseAction
      * @date 2015-8-11
      * @return
      */
-    protected LoginTicket getLoginTicket(HttpServletRequest request)
+    public static LoginTicket getLoginTicket(HttpServletRequest request)
     {
         return (LoginTicket)request.getSession().getAttribute(StaticResouse.USER_CONTEXT);
     }
@@ -38,7 +30,7 @@ public class BaseAction
      * @return
      * @throws
      */
-    protected String getLoginUserId(HttpServletRequest request)
+    public static String getLoginUserId(HttpServletRequest request)
     {
         LoginTicket loginUser = (LoginTicket)request.getSession().getAttribute(
             StaticResouse.USER_CONTEXT);
@@ -53,7 +45,7 @@ public class BaseAction
      * @return
      * @throws
      */
-    protected Integer getLoginUserIdByInteger(HttpServletRequest request)
+    public static Integer getLoginUserIdByInteger(HttpServletRequest request)
     {
         LoginTicket loginUser = (LoginTicket)request.getSession().getAttribute(
             StaticResouse.USER_CONTEXT);
@@ -66,5 +58,4 @@ public class BaseAction
 
         return Integer.parseInt(userIdStr);
     }
-
 }
